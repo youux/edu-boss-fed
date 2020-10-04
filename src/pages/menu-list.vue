@@ -1,24 +1,13 @@
 <template>
   <div>
     <div class="online">
-      <Form inline :model="formItem" :label-width="70">
-        <FormItem label="手机号">
-          <Input v-model="formItem.input" placeholder="手机号"></Input>
-        </FormItem>
-        <FormItem label="注册时间">
-          <DatePicker :value="formItem.value2" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="注册时间" style="width: 432px"></DatePicker>
-
-        </FormItem>
-        <FormItem>
-          <Button type="success" class="mar-r" icon="md-refresh">重置</Button>
-          <Button icon="md-search">查询</Button>
-        </FormItem>
-      </Form>
+      <div></div>
+      <Button icon="md-add" type="primary">新建菜单</Button>
     </div>
     <Table border :columns="columns1" :data="data1">
       <template slot-scope="{  }" slot="action">
-        <Button class="gap" size="small" type="error">禁用</Button>
-        <Button size="small">分配角色</Button>
+        <Button class="mar-r" size="small">编辑</Button>
+        <Button size="small">删除</Button>
       </template>
     </Table>
     <div class="page-end"><Page :total="100" /></div>
@@ -28,49 +17,39 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
-  name: 'user',
+  name: 'menu-list',
   data () {
     return {
-      formItem: {
-        input: '',
-        select: '0'
-      },
       columns1: [
         {
-          width: 60,
+          width: 80,
           align: 'center',
-          title: 'ID',
+          title: '编号',
           key: 'id'
         },
         {
           align: 'center',
-          title: '头像',
-          key: 'id'
-        },
-        {
-          align: 'center',
-          title: '用户名',
+          title: '菜单名称',
           key: 'age'
         },
         {
           align: 'center',
-          title: '手机号',
+          title: '菜单级数',
           key: 'address'
         },
         {
           align: 'center',
-          title: '注册时间',
+          title: '前端图标',
           key: 'address'
         },
         {
-          width: 80,
           align: 'center',
-          title: '状态',
-          key: 'tag'
+          title: '排序',
+          key: 'address'
         },
         {
           align: 'center',
-          width: 210,
+          width: 140,
           title: '操作',
           key: 'action',
           slot: 'action'
