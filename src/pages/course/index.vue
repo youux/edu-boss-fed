@@ -17,7 +17,7 @@
           <Button icon="md-search">查询</Button>
         </FormItem>
       </Form>
-      <Button icon="md-add" type="primary">新建课程</Button>
+      <Button icon="md-add" type="primary" @click="openModal">新建课程</Button>
     </div>
     <Table border :columns="columns1" :data="data1">
       <template slot-scope="{  }" slot="action">
@@ -27,7 +27,14 @@
         <Button size="small">内容管理</Button>
       </template>
     </Table>
-    <div class="page-end"><Page :total="100" /></div>
+    <div class="page-end">
+      <Page :total="100" />
+    </div>
+
+    <!-- 弹窗 -->
+    <Modal footer-hide v-model="moadlBox.show" :title="moadlBox.title">
+      <p>Content of dialog</p>
+    </Modal>
   </div>
 </template>
 
@@ -35,6 +42,7 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'course',
+  components: {},
   data () {
     return {
       formItem: {
@@ -84,7 +92,18 @@ export default Vue.extend({
           address: 'New York No. 1 Lake Park',
           date: '2016-10-03'
         }
-      ]
+      ],
+      moadlBox: {
+        show: false
+      }
+    }
+  },
+  methods: {
+    openModal () {
+      this.moadlBox = {
+        show: true,
+        title: '标题'
+      }
     }
   }
 })
