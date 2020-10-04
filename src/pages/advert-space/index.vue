@@ -22,7 +22,7 @@ export default Vue.extend({
     return {
       columns1: [
         {
-          width: 80,
+          width: 110,
           align: 'center',
           title: 'spaceKey',
           key: 'id'
