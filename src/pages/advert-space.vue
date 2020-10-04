@@ -1,22 +1,16 @@
 <template>
-  <div id="app">
-    <!-- 根路由出口 -->
-    <router-view />
-  </div>
+  <div>advert-space</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
+  name: 'advert-space',
   data () {
     return {}
   }
 })
 </script>
 
-<style lang="scss" scoped>
-#app {
-  height: 100%;
-}
-
+<style lang='scss' scoped>
 </style>

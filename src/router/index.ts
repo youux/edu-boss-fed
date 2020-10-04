@@ -1,22 +1,59 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
+// 路由配置规则
 const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue')
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '*',
+    name: 'not-fount',
+    component: () => import(/* webpackChunkName: "not-fount" */ '@/views/not-fount.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue')
+  },
+  {
+    path: '/advert-space',
+    name: 'advert-space',
+    component: () => import(/* webpackChunkName: "advertspace" */ '@/pages/advert-space.vue')
+  },
+  {
+    path: '/advert',
+    name: 'advert',
+    component: () => import(/* webpackChunkName: "p-advert" */ '@/pages/advert.vue')
+  },
+  {
+    path: '/course',
+    name: 'course',
+    component: () => import(/* webpackChunkName: "course" */ '@/pages/course.vue')
+  },
+  {
+    path: '/menu',
+    name: 'menu',
+    component: () => import(/* webpackChunkName: "menu" */ '@/pages/menu.vue')
+  },
+  {
+    path: '/resource',
+    name: 'resource',
+    component: () => import(/* webpackChunkName: "resource" */ '@/pages/resource.vue')
+  },
+  {
+    path: '/role',
+    name: 'role',
+    component: () => import(/* webpackChunkName: "role" */ '@/pages/role.vue')
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import(/* webpackChunkName: "user" */ '@/pages/user.vue')
   }
 ]
 
