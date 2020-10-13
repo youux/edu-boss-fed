@@ -2,10 +2,10 @@
   <Layout>
     <Header>
       <div class="layout-logo">EDU BOSS</div>
-      <Dropdown>
-        <Avatar icon="ios-person" /><span class="name">111名字</span>
+      <Dropdown trigger="click" @on-click="handleSelect" v-if="userInfo.userName">
+        <Avatar :src="userInfo.portrait" /><span class="name">{{userInfo.weixinNickName}}</span>
         <DropdownMenu slot="list">
-          <DropdownItem>退出</DropdownItem>
+          <DropdownItem name="edit">退出</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </Header>
@@ -17,10 +17,12 @@
               <template slot="title">
                 <Icon :type="item.icon"></Icon>{{item.label}}
               </template>
-              <MenuItem v-for="(li,inx) in item.children" :key="inx" :name="li.name" :to="li.path">
-              <Icon :type="li.icon"></Icon>{{li.label}}</MenuItem>
+              <MenuItem v-for="(li,inx) in item.children" :key="inx" :name="li.path" :to="li.path">
+              <Icon :type="li.icon"></Icon>{{li.label}}
+              </MenuItem>
             </Submenu>
-            <MenuItem :name="item.name" :key="index" v-else :to="item.path">
+
+            <MenuItem :name="item.path" :key="index" v-else :to="item.path">
             <Icon :type="item.icon"></Icon>{{item.label}}
             </MenuItem>
           </template>
@@ -41,12 +43,22 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { getUserInfo } from '@/services/login'
+interface MenuProp {
+  name?: string;
+  icon?: string;
+  label?: string;
+  path?: string;
+  children?: MenuProp;
+}
 
 export default Vue.extend({
   name: 'Home',
-  data () {
+  data() {
     return {
+      userInfo: {},
       activeName: '',
+      activeLabel: '',
       openName: [],
       BreadcrumbList: [],
       menuList: [
@@ -109,24 +121,45 @@ export default Vue.extend({
       ]
     }
   },
-  created () {
-    const route = this.$route
-    this.selectMenu('2')
-    if (route.name !== 'course') {
-      this.$router.push('/course')
+  async created() {
+    const { data } = await getUserInfo({ Authorization: this.$store.state.user.access_token })
+    if (data.state) {
+      this.userInfo = data.content
     }
+
+    // 默认页面
+    const route = this.$route
+    this.selectMenu(route.path)
   },
   methods: {
-    selectMenu (name: string): void {
-      this.BreadcrumbList = []
-      const arr = name.split('-')
-      this.openName = [arr[0]]
-      this.activeName = name
-
-      const firstName: object = this.menuList[Number([arr[0]]) - 1]
-      this.BreadcrumbList = [firstName.label]
-      if (arr.length > 1) {
-        this.BreadcrumbList.push(firstName.children[Number([arr[1]]) - 1].label)
+    // 导航
+    selectMenu(path: string): void {
+      this.activeName = path
+      const menu = JSON.parse(JSON.stringify(this.menuList))
+      this.loopData(menu, path)
+      const arr = this.activeLabel.split('-')
+      const key = arr.map((item) => Number(item) - 1)
+      this.openName = ([key[0].toString()] as any)
+      this.BreadcrumbList = [menu[key[0]].label] as any
+      if (key.length > 1) {
+        this.BreadcrumbList = [menu[key[0]].label, menu[key[0]].children[key[1]].label] as any
+      }
+    },
+    loopData(data: MenuProp[], key: string): void | string {
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i]
+        if (element.path === key) {
+          this.activeLabel = element.name as string
+        } else if (element.children) {
+          this.loopData(element.children as any, key)
+        }
+      }
+    },
+    // header操作
+    handleSelect(name: string) {
+      if (name === 'edit') {
+        window.localStorage.clear()
+        this.$router.go(0)
       }
     }
   }
@@ -149,6 +182,9 @@ export default Vue.extend({
 }
 .ivu-layout-sider {
   background-color: #fff;
+}
+.ivu-menu {
+  height: 100%;
 }
 .layout-logo {
   font-size: 14px;
@@ -179,5 +215,4 @@ export default Vue.extend({
   cursor: pointer;
   color: #fff;
 }
-
 </style>

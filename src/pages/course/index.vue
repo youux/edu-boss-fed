@@ -94,7 +94,8 @@ export default Vue.extend({
         }
       ],
       moadlBox: {
-        show: false
+        show: false,
+        title: ''
       }
     }
   },

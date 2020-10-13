@@ -14,6 +14,9 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }]
+    'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }],
+    '@typescript-eslint/no-explicit-any': 'off',
+    'space-before-function-paren': 'off',
+    '@typescript-eslint/no-unused-vars': 'off'
   }
 }

@@ -6,7 +6,7 @@
           <Input v-model="formItem.input" placeholder="手机号"></Input>
         </FormItem>
         <FormItem label="注册时间">
-          <DatePicker :value="formItem.value2" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="注册时间" style="width: 432px"></DatePicker>
+          <DatePicker :value="formItem.value2" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="注册时间"></DatePicker>
 
         </FormItem>
         <FormItem>
