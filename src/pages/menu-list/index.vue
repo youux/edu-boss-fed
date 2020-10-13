@@ -2,7 +2,7 @@
   <div>
     <div class="online">
       <div></div>
-      <Button icon="md-add" type="primary">新建菜单</Button>
+      <Button icon="md-add" type="primary" @click="add">新建菜单</Button>
     </div>
     <Table border :columns="columns1" :data="data1">
       <template slot-scope="{  }" slot="action">
@@ -10,7 +10,9 @@
         <Button size="small">删除</Button>
       </template>
     </Table>
-    <div class="page-end"><Page :total="100" /></div>
+    <div class="page-end">
+      <Page :total="100" />
+    </div>
   </div>
 </template>
 
@@ -18,7 +20,7 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'menu-list',
-  data () {
+  data() {
     return {
       columns1: [
         {
@@ -64,6 +66,11 @@ export default Vue.extend({
         }
       ]
     }
+  },
+  methods: {
+    add() {
+      this.$router.push('/add-menu-item')
+    }
   }
 })
 </script>
@@ -77,5 +84,4 @@ export default Vue.extend({
 .ivu-form-item {
   margin-bottom: 0;
 }
-
 </style>

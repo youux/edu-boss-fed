@@ -135,15 +135,15 @@ export default Vue.extend({
     // 导航
     selectMenu(path: string): void {
       this.activeName = path
-      const menu = JSON.parse(JSON.stringify(this.menuList))
-      this.loopData(menu, path)
-      const arr = this.activeLabel.split('-')
-      const key = arr.map((item) => Number(item) - 1)
-      this.openName = ([key[0].toString()] as any)
-      this.BreadcrumbList = [menu[key[0]].label] as any
-      if (key.length > 1) {
-        this.BreadcrumbList = [menu[key[0]].label, menu[key[0]].children[key[1]].label] as any
-      }
+      // const menu = JSON.parse(JSON.stringify(this.menuList))
+      // this.loopData(menu, path)
+      // const arr = this.activeLabel.split('-')
+      // const key = arr.map((item) => Number(item) - 1)
+      // this.openName = ([key[0].toString()] as any)
+      // this.BreadcrumbList = [menu[key[0]].label] as any
+      // if (key.length > 1) {
+      //   this.BreadcrumbList = [menu[key[0]].label, menu[key[0]].children[key[1]].label] as any
+      // }
     },
     loopData(data: MenuProp[], key: string): void | string {
       for (let i = 0; i < data.length; i++) {
