@@ -9,11 +9,21 @@ interface User {
 export const loginTo = (key: User) => {
   return axios({
     method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     url: '/front/user/login',
     data: {
       phone: key.phone,
       password: key.password
-    }
+    },
+    transformRequest: [
+      data => {
+        let ret = ''
+        for (const key in data) {
+          ret += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]) + '&'
+        }
+        return ret.slice(0, -1)
+      }
+    ]
   })
 }
 
