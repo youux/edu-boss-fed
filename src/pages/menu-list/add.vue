@@ -81,14 +81,14 @@ export default {
         title: '提示',
         content: '是否提交数据',
         onOk: async () => {
-          const { data } = await createOrUpdateMenu(this.addMenuItem)
-          if (data.code === '000000') {
-            this.$Message.success({
-              background: true,
-              content: data.mesg
-            })
-            this.$router.back()
-          }
+          // const { data } = await createOrUpdateMenu(this.addMenuItem)
+          // if (data.code === '000000') {
+          //   this.$Message.success({
+          //     background: true,
+          //     content: data.mesg
+          //   })
+          //   this.$router.back()
+          // }
         }
       })
     },
