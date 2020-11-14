@@ -1,4 +1,4 @@
-import api from '../assets/js/api'
+import axios from '../assets/js/api'
 
 interface Menu {
   id?: number;
@@ -11,17 +11,17 @@ interface Menu {
   orderNum?: number;
 }
 
-export const createOrUpdateMenu = (key: Menu) => {
-  const URL = '/boss/menu/saveOrUpdate'
-  const data = {
-    id: key.id,
-    name: key.name,
-    href: key.href,
-    parentId: key.parentId,
-    description: key.description,
-    icon: key.icon,
-    shown: key.shown,
-    orderNum: key.orderNum
-  }
-  return api.post(URL, data)
+export const getUserPermissions = (key: Menu) => {
+  return axios({
+    method: 'get',
+    url: '/boss/permission/getUserPermissions',
+    data: {}
+  })
+}
+export const getPermissionsAll = (key: Menu) => {
+  return axios({
+    method: 'get',
+    url: '/boss/menu/getAll',
+    data: {}
+  })
 }

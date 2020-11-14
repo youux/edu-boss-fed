@@ -4,24 +4,28 @@
       <div></div>
       <Button icon="md-add" type="primary" @click="add">新建菜单</Button>
     </div>
-    <Table border :columns="columns1" :data="data1">
+    <Table border :columns="columns1" :data="UserPermissions">
       <template slot-scope="{  }" slot="action">
         <Button class="mar-r" size="small">编辑</Button>
         <Button size="small">删除</Button>
       </template>
     </Table>
-    <div class="page-end">
-      <Page :total="100" />
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
+import { getUserPermissions, getPermissionsAll } from '@/services/menu-list'
+
 export default Vue.extend({
   name: 'menu-list',
   data() {
     return {
+      searchKey: {
+        pageNum: 1,
+        pageSize: 5
+      },
       columns1: [
         {
           width: 80,
@@ -32,22 +36,22 @@ export default Vue.extend({
         {
           align: 'center',
           title: '菜单名称',
-          key: 'age'
+          key: 'hname'
         },
         {
           align: 'center',
           title: '菜单级数',
-          key: 'address'
+          key: 'level'
         },
         {
           align: 'center',
           title: '前端图标',
-          key: 'address'
+          key: 'icon'
         },
         {
           align: 'center',
           title: '排序',
-          key: 'address'
+          key: 'orderNum'
         },
         {
           align: 'center',
@@ -57,19 +61,30 @@ export default Vue.extend({
           slot: 'action'
         }
       ],
-      data1: [
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        }
-      ]
+      UserPermissions: []
     }
+  },
+  created() {
+    this.init()
   },
   methods: {
     add() {
       this.$router.push('/add-menu-item')
+    },
+    async init() {
+      const { data } = await getUserPermissions({})
+      if (data.state === 1) {
+        const Data = data.content.resourceList
+        const key = data.content.menuList
+        Data.forEach((element: any) => {
+          key.forEach((e: any) => {
+            if (element.updatedBy === e.updatedBy) {
+              element.hname = e.name
+            }
+          })
+        })
+        this.UserPermissions = Data
+      }
     }
   }
 })

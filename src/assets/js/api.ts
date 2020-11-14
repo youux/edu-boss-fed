@@ -2,38 +2,11 @@ import axios from 'axios'
 import store from '@/store'
 import router from '@/router'
 
-axios.defaults.baseURL = '/'
-axios.defaults.timeout = 5000
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-
-const getApiUtils = (data: any) => {
-  return data
-}
-
-const get = async (url: string, params: any) => {
-  return await axios({
-    url,
-    method: 'get',
-    params: getApiUtils(params)
-  })
-}
-
-const post = async (url: string, data: any) => {
-  return await axios({
-    url,
-    method: 'post',
-    data: getApiUtils(data),
-    transformRequest: [
-      data => {
-        let ret = ''
-        for (const key in data) {
-          ret += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]) + '&'
-        }
-        return ret.slice(0, -1)
-      }
-    ]
-  })
-}
+const instance = axios.create({
+  baseURL: '/',
+  timeout: 5000,
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+})
 
 const redirectLogin = () => {
   router.push({
@@ -64,10 +37,15 @@ const refreshToken = () => {
 }
 
 // 请求拦截器
-axios.interceptors.request.use(
+instance.interceptors.request.use(
   config => {
     if (config.method === 'get') {
       config.headers.Authorization = store.state.user.access_token
+    }
+    if (config.method === 'post') {
+      if (store.state.user) {
+        config.headers.Authorization = store.state.user.access_token
+      }
     }
     return config
   },
@@ -77,7 +55,7 @@ axios.interceptors.request.use(
 // 响应拦截器
 let isRfreshing = false
 let requests: any[] = []
-axios.interceptors.response.use(
+instance.interceptors.response.use(
   response => response,
   error => {
     if (error.response) {
@@ -138,4 +116,4 @@ axios.interceptors.response.use(
   }
 )
 
-export default { get, post }
+export default instance

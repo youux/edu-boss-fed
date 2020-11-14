@@ -1,18 +1,18 @@
 <template>
   <div>
     <div class="online">
-      <Form inline :model="formItem" :label-width="70">
+      <Form inline :model="searchKey" :label-width="70">
         <FormItem label="角色名称">
-          <Input v-model="formItem.input" placeholder="角色名称"></Input>
+          <Input v-model="searchKey.name" placeholder="角色名称"></Input>
         </FormItem>
         <FormItem>
-          <Button type="success" class="mar-r" icon="md-refresh">重置</Button>
-          <Button icon="md-search">查询</Button>
+          <Button icon="md-search"  class="mar-r" @click="search(true)">查询</Button>
+          <Button type="success" icon="md-refresh" @click="search(false)">重置</Button>
         </FormItem>
       </Form>
       <Button icon="md-add" type="primary">新建角色</Button>
     </div>
-    <Table border :columns="columns1" :data="data1">
+    <Table border :columns="columns1" :data="RolePages.records">
       <template slot-scope="{  }" slot="action">
         <Button class="mar-r" size="small">分配菜单</Button>
         <Button class="mar-r" size="small">分配资源</Button>
@@ -20,19 +20,27 @@
         <Button size="small">删除</Button>
       </template>
     </Table>
-    <div class="page-end"><Page :total="100" /></div>
+    <div class="page-end" v-if="RolePages.pages>1">
+      <Page :total="RolePages.total" :current="searchKey.current" :page-size="searchKey.size" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
+import { getRolePages } from '@/services/role'
+
 export default Vue.extend({
   name: 'role',
-  data () {
+  data() {
     return {
-      formItem: {
-        input: ''
+      searchKey: {
+        name: '',
+        current: 1,
+        size: 50
       },
+      RolePages: {},
       columns1: [
         {
           width: 80,
@@ -43,17 +51,17 @@ export default Vue.extend({
         {
           align: 'center',
           title: '角色名称',
-          key: 'age'
+          key: 'name'
         },
         {
           align: 'center',
           title: '描述',
-          key: 'address'
+          key: 'description'
         },
         {
           align: 'center',
           title: '添加时间',
-          key: 'address'
+          key: 'createdTime'
         },
         {
           align: 'center',
@@ -62,15 +70,34 @@ export default Vue.extend({
           key: 'action',
           slot: 'action'
         }
-      ],
-      data1: [
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          date: '2016-10-03'
-        }
       ]
+    }
+  },
+  created() {
+    this.submit(this.searchKey)
+  },
+  methods: {
+    async submit(key: any) {
+      const { data } = await getRolePages(key)
+      if (data.code === '000000') {
+        this.RolePages = data.data
+      }
+    },
+    search(type: boolean) {
+      let Bool = false
+      if (type) {
+        if (this.searchKey.name) {
+          Bool = true
+        }
+      } else {
+        if (this.searchKey.name) {
+          this.searchKey.name = ''
+          Bool = true
+        }
+      }
+      if (Bool) {
+        this.submit(this.searchKey)
+      }
     }
   }
 })
@@ -85,5 +112,4 @@ export default Vue.extend({
 .ivu-form-item {
   margin-bottom: 0;
 }
-
 </style>
